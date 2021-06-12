@@ -1,6 +1,19 @@
 version : '3'
 
 services:
+  db:
+    image: mysql:5.7.22
+    container_name: db
+    environment: 
+      MYSQL_DATABASE: laravel
+      MYSQL_ROOT_PASSWORD: you_awesomePassword
+    volumes:
+      - dbdata:/var/lib/mysql
+  
+  redis:
+    image: redis:latest
+    container_name: redis
+
   webserver:
     build: 
       context: .
@@ -26,3 +39,12 @@ services:
     volumes: 
       - ./:/var/www
       - ./config/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    environment: 
+        DB_HOST: db
+        DB_PASSWORD: you_awesomePassword
+        SESSION_DRIVER: redis
+        REDIS_HOST: redis
+        
+volumes:
+  dbdata:
+    driver: local

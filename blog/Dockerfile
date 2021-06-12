@@ -19,7 +19,10 @@ RUN apk update && apk add \
     docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ \
     --with-jpeg-dir=/usr/include/ \
     --with-png-dir=/usr/include/ && \
-    docker-php-ext-install gd
+    docker-php-ext-install gd && \
+    apk add autoconf && pecl install -o -f redis && \
+    rm -fr /tmp/pear && \
+    docker-php-ext-enable redis && apk del autoconf
 
 COPY ./config/php/local.ini /usr/local/etc/php/conf.d/local.ini
 
